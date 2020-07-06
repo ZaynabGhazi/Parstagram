@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="MASTER_KEY">Zaynab_CodePath_Insta</string>
+    <string name="App_Id">zaynab-parstagram</string>
+    <string name="server_URL">https://zaynab-parstagram.herokuapp.com/parse/</string>
+</resources>
