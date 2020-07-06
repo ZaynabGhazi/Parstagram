@@ -13,7 +13,7 @@
 *.dex
 
 # Java class files
-#*.class
+*.class
 
 # Generated files
 bin/
