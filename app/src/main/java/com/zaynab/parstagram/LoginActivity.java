@@ -38,7 +38,7 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.i(TAG,"Login button clicked");
+                Log.i(TAG, "Login button clicked");
                 String username = etUsername.getText().toString();
                 String password = etPassword.getText().toString();
                 loginUser(username, password);
@@ -48,7 +48,7 @@ public class LoginActivity extends AppCompatActivity {
         btnSignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.i(TAG,"SignUp button clicked");
+                Log.i(TAG, "SignUp button clicked");
                 String username = etUsername.getText().toString();
                 String password = etPassword.getText().toString();
                 signupUser(username, password);
@@ -57,17 +57,17 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void signupUser(String username, String password) {
-        Log.i(TAG,"Attempt to signup user "+username);
+        Log.i(TAG, "Attempt to signup user " + username);
         ParseUser user = new ParseUser();
         user.setUsername(username);
         user.setPassword(password);
         user.signUpInBackground(new SignUpCallback() {
             public void done(ParseException e) {
                 if (e == null) {
-                   goMainActivity();
-                    Toast.makeText(LoginActivity.this,"Sign-up successful!",Toast.LENGTH_SHORT).show();
+                    goMainActivity();
+                    Toast.makeText(LoginActivity.this, "Sign-up successful!", Toast.LENGTH_SHORT).show();
                 } else {
-                    Log.e(TAG,"Issue with sign-up.",e);
+                    Log.e(TAG, "Issue with sign-up.", e);
                     Toast.makeText(LoginActivity.this, "Username or password does not match criteria.", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -77,24 +77,24 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void loginUser(String username, String password) {
-        Log.i(TAG,"Attempt to login user "+username);
+        Log.i(TAG, "Attempt to login user " + username);
         //goTo Main if login successful
         ParseUser.logInInBackground(username, password, new LogInCallback() {
             @Override
             public void done(ParseUser user, ParseException e) {
-                if (e != null){
-                    Log.e(TAG,"Issue with login.",e);
+                if (e != null) {
+                    Log.e(TAG, "Issue with login.", e);
                     Toast.makeText(LoginActivity.this, "Username or password incorrect.", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 goMainActivity();
-                Toast.makeText(LoginActivity.this,"Login successful!",Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginActivity.this, "Login successful!", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     private void goMainActivity() {
-        Intent intent = new Intent(this,MainActivity.class);
+        Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
 }

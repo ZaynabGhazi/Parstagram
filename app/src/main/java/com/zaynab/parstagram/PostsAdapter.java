@@ -1,6 +1,8 @@
 package com.zaynab.parstagram;
 
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Movie;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,14 +24,23 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
 
     private Context context;
     private List<Post> posts;
+    private OnClickListener clickListener;
 
 
-    public PostsAdapter(Context context, List<Post> posts) {
-        this.context = context;
-        this.posts = posts;
+
+    //communicate with Main:
+    public interface OnClickListener{
+        void OnItemClicked(int position);
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
+    public PostsAdapter(Context context, List<Post> posts, OnClickListener clickListener) {
+        this.context = context;
+        this.posts = posts;
+        this.clickListener = clickListener;
+
+    }
+
+    class ViewHolder extends RecyclerView.ViewHolder implements  View.OnClickListener {
 
         private TextView tvUsername;
         private TextView tvDesc;
@@ -44,15 +55,21 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             ivPhoto = itemView.findViewById(R.id.ivPost);
             tvTimestamp = itemView.findViewById(R.id.tvTimestamp);
             ivProfile = itemView.findViewById(R.id.ivProfile);
+            itemView.setOnClickListener(this);
         }
 
         public void bind(Post post) {
             tvUsername.setText(post.getUser().getUsername());
             tvDesc.setText(post.getDescription());
-            tvTimestamp.setText(TimeFormatter.getTimeDifference(post.getCreatedAt().toString())+" ago");
+            tvTimestamp.setText(TimeFormatter.getTimeDifference(post.getCreatedAt().toString()) + " ago");
             ParseFile image = post.getImage();
             if (image != null) Glide.with(context).load(image.getUrl()).into(ivPhoto);
             Glide.with(context).load(R.drawable.profile_placeholder).apply(RequestOptions.circleCropTransform()).into(ivProfile);
+        }
+
+        @Override
+        public void onClick(View view) {
+            clickListener.OnItemClicked(getAdapterPosition());
         }
     }
 
@@ -73,6 +90,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
     public int getItemCount() {
         return posts.size();
     }
+
     //Helper function for refresh-on-swipe container
     public void clear() {
         posts.clear();

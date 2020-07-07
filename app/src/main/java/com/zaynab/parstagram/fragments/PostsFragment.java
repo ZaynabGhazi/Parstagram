@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -52,7 +53,18 @@ public class PostsFragment extends Fragment {
         rvPosts = view.findViewById(R.id.rvPosts);
         swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainer);
         allPosts = new ArrayList<>();
-        adapter = new PostsAdapter(getContext(), allPosts);
+        PostsAdapter.OnClickListener clickListener = new PostsAdapter.OnClickListener() {
+            @Override
+            public void OnItemClicked(int position) {
+                Log.i(TAG,"Post clicked at position "+position);
+                Bundle b = new Bundle();
+                b.putSerializable("POST",allPosts.get(position));
+                PostDetailsFragment postDetailsFragment = new PostDetailsFragment();
+                postDetailsFragment.setArguments(b);
+                getFragmentManager().beginTransaction().replace(R.id.flContainer,postDetailsFragment).commit();
+            }
+        };
+        adapter = new PostsAdapter(getContext(), allPosts, clickListener);
         rvPosts.setAdapter(adapter);
         rvPosts.setLayoutManager(new LinearLayoutManager(getContext()));
         queryPosts();
@@ -99,19 +111,19 @@ public class PostsFragment extends Fragment {
         query.setLimit(20);
         query.addDescendingOrder(Post.KEY_CREATEDAT);
         query.findInBackground(new FindCallback<Post>() {
-        @Override
-        public void done(List<Post> posts, ParseException e) {
-            if (e != null) {
-                Log.e(TAG, "Issue with getting posts.");
-                return;
+            @Override
+            public void done(List<Post> posts, ParseException e) {
+                if (e != null) {
+                    Log.e(TAG, "Issue with getting posts.");
+                    return;
+                }
+                for (Post post : posts) {
+                    Log.i(TAG, "Post: " + post.getDescription() + ", username: " + post.getUser().getUsername());
+                }
+                allPosts.addAll(posts);
+                adapter.notifyDataSetChanged();
             }
-            for (Post post : posts) {
-                Log.i(TAG, "Post: " + post.getDescription() + ", username: " + post.getUser().getUsername());
-            }
-            allPosts.addAll(posts);
-            adapter.notifyDataSetChanged();
-        }
-    });
+        });
 
-}
+    }
 }

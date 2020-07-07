@@ -141,7 +141,7 @@ public class ComposeFragment extends Fragment {
             if (resultCode == RESULT_OK) {
                 Bitmap takenImage = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
                 // Resizing bitmap : 1600 pixels -> ensure Memory < 10 MB given default depth of pixels
-                Bitmap resized = scaleToFill(takenImage,MAX_WIDTH,MAX_HEIGHT);
+                Bitmap resized = scaleToFill(takenImage, MAX_WIDTH, MAX_HEIGHT);
                 // Load the taken image into a preview
                 ivPostImage.setImageBitmap(resized);
             } else { // Result was a failure
@@ -149,8 +149,8 @@ public class ComposeFragment extends Fragment {
             }
         }
     }
-    public static Bitmap scaleToFill(Bitmap b, int width, int height)
-    {
+
+    public static Bitmap scaleToFill(Bitmap b, int width, int height) {
         float factorH = height / (float) b.getWidth();
         float factorW = width / (float) b.getWidth();
         float factorToUse = (factorH > factorW) ? factorW : factorH;

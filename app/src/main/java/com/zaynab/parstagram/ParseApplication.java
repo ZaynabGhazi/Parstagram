@@ -17,11 +17,11 @@ public class ParseApplication extends Application {
         //register parseModels
         ParseObject.registerSubclass(Post.class);
         //setup parse server
-        Log.i("URL",getString(R.string.server_URL));
-            Parse.initialize(new Parse.Configuration.Builder(this)
-                    .applicationId(getString(R.string.App_Id))
-                    .clientKey(getString(R.string.MASTER_KEY))
-                    .server(getString(R.string.server_URL)).build());
+        Log.i("URL", getString(R.string.server_URL));
+        Parse.initialize(new Parse.Configuration.Builder(this)
+                .applicationId(getString(R.string.App_Id))
+                .clientKey(getString(R.string.MASTER_KEY))
+                .server(getString(R.string.server_URL)).build());
 
     }
 }
