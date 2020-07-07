@@ -60,20 +60,12 @@ public class ComposeFragment extends Fragment {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
+        bindView(view);
+        make_capture();
+        make_submit();
+    }
 
-        ivPostImage = view.findViewById(R.id.ivPostImage);
-        etDesctiption = view.findViewById(R.id.etDescription);
-        btnCapture = view.findViewById(R.id.btnCaptureImage);
-        btnSubmit = view.findViewById(R.id.btnSubmit);
-
-        btnCapture.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                launchCamera();
-            }
-        });
-
-        //queryPosts();
+    private void make_submit() {
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -90,7 +82,22 @@ public class ComposeFragment extends Fragment {
                 savePost(desc, currentUsr, photoFile);
             }
         });
+    }
 
+    private void make_capture() {
+        btnCapture.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                launchCamera();
+            }
+        });
+    }
+
+    private void bindView(View view) {
+        ivPostImage = view.findViewById(R.id.ivPostImage);
+        etDesctiption = view.findViewById(R.id.etDescription);
+        btnCapture = view.findViewById(R.id.btnCaptureImage);
+        btnSubmit = view.findViewById(R.id.btnSubmit);
     }
 
 

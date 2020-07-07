@@ -50,26 +50,34 @@ public class PostsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        bindView(view);
+        queryPosts();
+        make_refreshOnSwipe();
+
+
+    }
+
+    private void bindView(View view) {
         rvPosts = view.findViewById(R.id.rvPosts);
         swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainer);
         allPosts = new ArrayList<>();
         PostsAdapter.OnClickListener clickListener = new PostsAdapter.OnClickListener() {
             @Override
             public void OnItemClicked(int position) {
-                Log.i(TAG,"Post clicked at position "+position);
+                Log.i(TAG, "Post clicked at position " + position);
                 Bundle b = new Bundle();
-                b.putSerializable("POST",allPosts.get(position));
+                b.putSerializable("POST", allPosts.get(position));
                 PostDetailsFragment postDetailsFragment = new PostDetailsFragment();
                 postDetailsFragment.setArguments(b);
-                getFragmentManager().beginTransaction().replace(R.id.flContainer,postDetailsFragment).commit();
+                getFragmentManager().beginTransaction().replace(R.id.flContainer, postDetailsFragment).commit();
             }
         };
         adapter = new PostsAdapter(getContext(), allPosts, clickListener);
         rvPosts.setAdapter(adapter);
         rvPosts.setLayoutManager(new LinearLayoutManager(getContext()));
-        queryPosts();
-        //implement refresh on swipe
-        // Configure the refreshing colors
+    }
+
+    private void make_refreshOnSwipe() {
         swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
@@ -80,7 +88,6 @@ public class PostsFragment extends Fragment {
                 populateTimeline(20);
             }
         });
-
     }
 
     private void populateTimeline(int i) {

@@ -13,7 +13,6 @@ public class ParseApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-
         //register parseModels
         ParseObject.registerSubclass(Post.class);
         //setup parse server
