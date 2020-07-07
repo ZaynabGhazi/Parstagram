@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.parse.ParseFile;
 
 import org.w3c.dom.Text;
@@ -33,27 +34,32 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         private TextView tvUsername;
         private TextView tvDesc;
         private ImageView ivPhoto;
+        private TextView tvTimestamp;
+        private ImageView ivProfile;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             tvUsername = itemView.findViewById(R.id.tvUsername);
             tvDesc = itemView.findViewById(R.id.tvDesc);
-            ivPhoto = itemView.findViewById(R.id.ivPhoto);
+            ivPhoto = itemView.findViewById(R.id.ivPost);
+            tvTimestamp = itemView.findViewById(R.id.tvTimestamp);
+            ivProfile = itemView.findViewById(R.id.ivProfile);
         }
 
         public void bind(Post post) {
             tvUsername.setText(post.getUser().getUsername());
             tvDesc.setText(post.getDescription());
+            tvTimestamp.setText(TimeFormatter.getTimeDifference(post.getCreatedAt().toString())+" ago");
             ParseFile image = post.getImage();
-            if (image != null)
-                Glide.with(context).load(image.getUrl()).into(ivPhoto);
+            if (image != null) Glide.with(context).load(image.getUrl()).into(ivPhoto);
+            Glide.with(context).load(R.drawable.profile_placeholder).apply(RequestOptions.circleCropTransform()).into(ivProfile);
         }
     }
 
     @NonNull
     @Override
     public PostsAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_post, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.insta_post, parent, false);
         return new ViewHolder(view);
     }
 
@@ -66,5 +72,16 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
     @Override
     public int getItemCount() {
         return posts.size();
+    }
+    //Helper function for refresh-on-swipe container
+    public void clear() {
+        posts.clear();
+        notifyDataSetChanged();
+    }
+
+    // Add a list of items -- change to type used
+    public void addAll(List<Post> list) {
+        posts.addAll(list);
+        notifyDataSetChanged();
     }
 }

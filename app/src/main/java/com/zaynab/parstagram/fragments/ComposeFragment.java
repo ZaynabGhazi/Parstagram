@@ -39,8 +39,8 @@ import static android.app.Activity.RESULT_OK;
 public class ComposeFragment extends Fragment {
     public static final String TAG = "COMPOSE FRAGMENT";
     private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 42;
-    public static final int MAX_WIDTH = 400;
-    public static final int MAX_HEIGHT = 400;
+    public static final int MAX_WIDTH = 600;
+    public static final int MAX_HEIGHT = 600;
     private ImageView ivPostImage;
     private EditText etDesctiption;
     private Button btnCapture;
