@@ -39,6 +39,8 @@ import static android.app.Activity.RESULT_OK;
 public class ComposeFragment extends Fragment {
     public static final String TAG = "COMPOSE FRAGMENT";
     private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 42;
+    public static final int MAX_WIDTH = 400;
+    public static final int MAX_HEIGHT = 400;
     private ImageView ivPostImage;
     private EditText etDesctiption;
     private Button btnCapture;
@@ -138,12 +140,22 @@ public class ComposeFragment extends Fragment {
         if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 Bitmap takenImage = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
-                // RESIZE BITMAP, see section below
+                // Resizing bitmap : 1600 pixels -> ensure Memory < 10 MB given default depth of pixels
+                Bitmap resized = scaleToFill(takenImage,MAX_WIDTH,MAX_HEIGHT);
                 // Load the taken image into a preview
-                ivPostImage.setImageBitmap(takenImage);
+                ivPostImage.setImageBitmap(resized);
             } else { // Result was a failure
                 Toast.makeText(getContext(), "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
             }
         }
     }
+    public static Bitmap scaleToFill(Bitmap b, int width, int height)
+    {
+        float factorH = height / (float) b.getWidth();
+        float factorW = width / (float) b.getWidth();
+        float factorToUse = (factorH > factorW) ? factorW : factorH;
+        return Bitmap.createScaledBitmap(b, (int) (b.getWidth() * factorToUse),
+                (int) (b.getHeight() * factorToUse), true);
+    }
+
 }
