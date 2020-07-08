@@ -80,6 +80,9 @@ public class ComposeFragment extends Fragment {
                     return;
                 }
                 savePost(desc, currentUsr, photoFile);
+                //redirect to timeline
+                PostsFragment postsFragment = new PostsFragment();
+                getFragmentManager().beginTransaction().replace(R.id.flContainer, postsFragment).commit();
             }
         });
     }
