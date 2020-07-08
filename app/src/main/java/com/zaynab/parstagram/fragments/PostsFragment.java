@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
+import com.zaynab.parstagram.EndlessRecyclerViewScrollListener;
 import com.zaynab.parstagram.Post;
 import com.zaynab.parstagram.PostsAdapter;
 import com.zaynab.parstagram.R;
@@ -34,8 +35,10 @@ public class PostsFragment extends Fragment {
     public static final String TAG = "POSTS_FRAGMENT";
     protected RecyclerView rvPosts;
     protected PostsAdapter adapter;
-    protected List<Post> allPosts;
     protected SwipeRefreshLayout swipeContainer;
+    private EndlessRecyclerViewScrollListener scrollListener;
+
+    protected List<Post> allPosts;
 
     public PostsFragment() {
     }
@@ -74,7 +77,38 @@ public class PostsFragment extends Fragment {
         };
         adapter = new PostsAdapter(getContext(), allPosts, clickListener);
         rvPosts.setAdapter(adapter);
-        rvPosts.setLayoutManager(new LinearLayoutManager(getContext()));
+        LinearLayoutManager llManager = new LinearLayoutManager(getContext());
+        rvPosts.setLayoutManager(llManager);
+        scrollListener = new EndlessRecyclerViewScrollListener(llManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                //last post
+                Log.i(TAG,"Infinite pagination activated!");
+                Post last = allPosts.get(allPosts.size()-1);
+                fetchOlderContent(last);
+            }
+        };
+        rvPosts.addOnScrollListener(scrollListener);
+    }
+
+    private void fetchOlderContent(Post last) {
+        ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
+        query.include(Post.KEY_USER);
+        query.whereLessThan(Post.KEY_CREATEDAT,last.getCreatedAt());
+        query.addDescendingOrder(Post.KEY_CREATEDAT);
+        query.findInBackground(new FindCallback<Post>() {
+            @Override
+            public void done(List<Post> posts, ParseException e) {
+                if (e != null) {
+                    Log.e(TAG, "Issue with getting posts.");
+                    return;
+                }
+                for (Post post : posts) {
+                    Log.i(TAG, "Post: " + post.getDescription() + ", username: " + post.getUser().getUsername());
+                }
+                adapter.addAll(posts);
+            }
+        });
     }
 
     private void make_refreshOnSwipe() {
