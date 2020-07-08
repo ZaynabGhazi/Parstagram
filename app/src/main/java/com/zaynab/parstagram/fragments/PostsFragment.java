@@ -83,8 +83,8 @@ public class PostsFragment extends Fragment {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
                 //last post
-                Log.i(TAG,"Infinite pagination activated!");
-                Post last = allPosts.get(allPosts.size()-1);
+                Log.i(TAG, "Infinite pagination activated!");
+                Post last = allPosts.get(allPosts.size() - 1);
                 fetchOlderContent(last);
             }
         };
@@ -94,7 +94,7 @@ public class PostsFragment extends Fragment {
     private void fetchOlderContent(Post last) {
         ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
         query.include(Post.KEY_USER);
-        query.whereLessThan(Post.KEY_CREATEDAT,last.getCreatedAt());
+        query.whereLessThan(Post.KEY_CREATEDAT, last.getCreatedAt());
         query.addDescendingOrder(Post.KEY_CREATEDAT);
         query.findInBackground(new FindCallback<Post>() {
             @Override

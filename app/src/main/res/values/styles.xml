@@ -5,6 +5,7 @@
         <item name="colorPrimary">#E1306C</item>
         <item name="colorPrimaryDark">#C13584</item>
         <item name="colorAccent">#0E68CE</item>
+        <item name="actionMenuTextColor">@android:color/black</item>
     </style>
 
 </resources>

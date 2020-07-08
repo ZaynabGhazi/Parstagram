@@ -27,9 +27,8 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
     private OnClickListener clickListener;
 
 
-
     //communicate with Main:
-    public interface OnClickListener{
+    public interface OnClickListener {
         void OnItemClicked(int position);
     }
 
@@ -40,7 +39,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
 
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder implements  View.OnClickListener {
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private TextView tvUsername;
         private TextView tvDesc;
@@ -64,7 +63,12 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             tvTimestamp.setText(TimeFormatter.getTimeDifference(post.getCreatedAt().toString()) + " ago");
             ParseFile image = post.getImage();
             if (image != null) Glide.with(context).load(image.getUrl()).into(ivPhoto);
+            // Glide.with(context).load(post.getUser().get("Photo")).placeholder(R.drawable.profile_placeholder).apply(RequestOptions.circleCropTransform()).into(ivProfile);
             Glide.with(context).load(R.drawable.profile_placeholder).apply(RequestOptions.circleCropTransform()).into(ivProfile);
+            if (post.getUser().get("Photo") != null)
+                Glide.with(context).load(post.getUser().getParseFile("Photo").getUrl()).placeholder(R.drawable.profile_placeholder).apply(RequestOptions.circleCropTransform()).into(ivProfile);
+
+
         }
 
         @Override
@@ -96,6 +100,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         posts.clear();
         notifyDataSetChanged();
     }
+
     public void addAll(List<Post> list) {
         posts.addAll(list);
         notifyDataSetChanged();

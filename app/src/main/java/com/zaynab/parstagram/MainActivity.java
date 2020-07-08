@@ -34,6 +34,7 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.zaynab.parstagram.fragments.ComposeFragment;
+import com.zaynab.parstagram.fragments.EditPictureFragment;
 import com.zaynab.parstagram.fragments.PostsFragment;
 import com.zaynab.parstagram.fragments.ProfileFragment;
 
@@ -88,14 +89,14 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setLogo(R.drawable.nav_logo_whiteout);
         getSupportActionBar().setDisplayUseLogoEnabled(true);
-        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.WHITE));
+       // getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.WHITE));
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
@@ -105,6 +106,10 @@ public class MainActivity extends AppCompatActivity {
             ParseUser currentUser = ParseUser.getCurrentUser();
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
+        }
+        if (item.getItemId() == R.id.change_photo_action){
+            Fragment frg = new EditPictureFragment();
+            fragmentManager.beginTransaction().replace(R.id.flContainer, frg).commit();
         }
         return true;
     }

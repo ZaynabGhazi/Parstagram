@@ -2,10 +2,13 @@
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-
     <item
         android:id="@+id/logout_action"
         android:icon="@android:drawable/ic_menu_close_clear_cancel"
         android:title="Log Out"
-        app:showAsAction="always" />
+        app:showAsAction="collapseActionView" />
+    <item
+        android:id="@+id/change_photo_action"
+        android:title="Edit Profile Picture"
+        app:showAsAction="collapseActionView" />
 </menu>
