@@ -17,7 +17,9 @@ import android.widget.Toast;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 import com.zaynab.parstagram.EndlessRecyclerViewScrollListener;
 import com.zaynab.parstagram.Post;
 import com.zaynab.parstagram.PostsAdapter;

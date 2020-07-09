@@ -81,8 +81,8 @@ public class ComposeFragment extends Fragment {
                 }
                 savePost(desc, currentUsr, photoFile);
                 //redirect to timeline
-                PostsFragment postsFragment = new PostsFragment();
-                getFragmentManager().beginTransaction().replace(R.id.flContainer, postsFragment).commit();
+                /*PostsFragment postsFragment = new PostsFragment();
+                getFragmentManager().beginTransaction().replace(R.id.flContainer, postsFragment).commit();*/
             }
         });
     }
@@ -152,6 +152,7 @@ public class ComposeFragment extends Fragment {
                 Bitmap takenImage = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
                 // Resizing bitmap : 1600 pixels -> ensure Memory < 10 MB given default depth of pixels
                 Bitmap resized = scaleToFill(takenImage, MAX_WIDTH, MAX_HEIGHT);
+                //ivPostImage.setImageBitmap(takenImage);
                 // Load the taken image into a preview
                 ivPostImage.setImageBitmap(resized);
             } else { // Result was a failure

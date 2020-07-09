@@ -3,6 +3,7 @@ package com.zaynab.parstagram;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Movie;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,11 +11,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.parse.ParseFile;
+import com.zaynab.parstagram.fragments.GridProfileFragment;
+import com.zaynab.parstagram.fragments.PostDetailsFragment;
 
 import org.w3c.dom.Text;
 
@@ -27,7 +31,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
     private OnClickListener clickListener;
 
 
-    //communicate with Main:
+    //communicate with fragment:
     public interface OnClickListener {
         void OnItemClicked(int position);
     }
@@ -67,6 +71,29 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             Glide.with(context).load(R.drawable.profile_placeholder).apply(RequestOptions.circleCropTransform()).into(ivProfile);
             if (post.getUser().get("Photo") != null)
                 Glide.with(context).load(post.getUser().getParseFile("Photo").getUrl()).placeholder(R.drawable.profile_placeholder).apply(RequestOptions.circleCropTransform()).into(ivProfile);
+
+            tvUsername.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    //Instead of communicating with fragments through an interface
+                    Bundle b = new Bundle();
+                    b.putSerializable("USER", posts.get(getAdapterPosition()));
+                    GridProfileFragment gridProfileFragment = new GridProfileFragment();
+                    gridProfileFragment.setArguments(b);
+                    ((AppCompatActivity)view.getContext()).getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, gridProfileFragment).commit();
+                }
+            });
+            ivProfile.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    //Instead of communicating with fragments through an interface
+                    Bundle b = new Bundle();
+                    b.putSerializable("USER", posts.get(getAdapterPosition()));
+                    GridProfileFragment gridProfileFragment = new GridProfileFragment();
+                    gridProfileFragment.setArguments(b);
+                    ((AppCompatActivity)view.getContext()).getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, gridProfileFragment).commit();
+                }
+            });
 
 
         }

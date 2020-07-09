@@ -35,6 +35,7 @@ import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.zaynab.parstagram.fragments.ComposeFragment;
 import com.zaynab.parstagram.fragments.EditPictureFragment;
+import com.zaynab.parstagram.fragments.GridProfileFragment;
 import com.zaynab.parstagram.fragments.PostsFragment;
 import com.zaynab.parstagram.fragments.ProfileFragment;
 
@@ -44,7 +45,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
-    private BottomNavigationView bottomNavigationView;
+    public BottomNavigationView bottomNavigationView;
     final FragmentManager fragmentManager = getSupportFragmentManager();
 
 
@@ -72,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case R.id.action_profile:
                         fragment = new ProfileFragment();
+                        //fragment = new GridProfileFragment();
                         break;
                     default:
                         fragment = new ComposeFragment();
@@ -89,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setLogo(R.drawable.nav_logo_whiteout);
         getSupportActionBar().setDisplayUseLogoEnabled(true);
-       // getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.WHITE));
+        // getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.WHITE));
     }
 
     @Override
@@ -107,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
         }
-        if (item.getItemId() == R.id.change_photo_action){
+        if (item.getItemId() == R.id.change_photo_action) {
             Fragment frg = new EditPictureFragment();
             fragmentManager.beginTransaction().replace(R.id.flContainer, frg).commit();
         }
