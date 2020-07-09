@@ -91,7 +91,7 @@ public class PostsFragment extends Fragment {
         rvPosts.addOnScrollListener(scrollListener);
     }
 
-    private void fetchOlderContent(Post last) {
+    protected void fetchOlderContent(Post last) {
         ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
         query.include(Post.KEY_USER);
         query.whereLessThan(Post.KEY_CREATEDAT, last.getCreatedAt());
@@ -124,7 +124,7 @@ public class PostsFragment extends Fragment {
         });
     }
 
-    private void populateTimeline(int i) {
+    protected void populateTimeline(int i) {
         ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
         query.include(Post.KEY_USER);
         query.setLimit(i);
