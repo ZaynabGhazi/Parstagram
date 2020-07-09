@@ -76,26 +76,26 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                 @Override
                 public void onClick(View view) {
                     //Instead of communicating with fragments through an interface
-                    Bundle b = new Bundle();
-                    b.putSerializable("USER", posts.get(getAdapterPosition()));
-                    GridProfileFragment gridProfileFragment = new GridProfileFragment();
-                    gridProfileFragment.setArguments(b);
-                    ((AppCompatActivity)view.getContext()).getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, gridProfileFragment).commit();
+                    launchGridProfile(view);
                 }
             });
             ivProfile.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     //Instead of communicating with fragments through an interface
-                    Bundle b = new Bundle();
-                    b.putSerializable("USER", posts.get(getAdapterPosition()));
-                    GridProfileFragment gridProfileFragment = new GridProfileFragment();
-                    gridProfileFragment.setArguments(b);
-                    ((AppCompatActivity)view.getContext()).getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, gridProfileFragment).commit();
+                    launchGridProfile(view);
                 }
             });
 
 
+        }
+
+        public void launchGridProfile(View view) {
+            Bundle b = new Bundle();
+            b.putSerializable("USER", posts.get(getAdapterPosition()));
+            GridProfileFragment gridProfileFragment = new GridProfileFragment();
+            gridProfileFragment.setArguments(b);
+            ((AppCompatActivity) view.getContext()).getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, gridProfileFragment).commit();
         }
 
         @Override
