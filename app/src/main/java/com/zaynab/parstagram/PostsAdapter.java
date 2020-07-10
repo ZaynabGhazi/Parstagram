@@ -126,7 +126,6 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                                     ivLikes.setImageDrawable(view.getResources().getDrawable(R.drawable.ufi_heart));
                                     likers.remove(ParseUser.getCurrentUser());
                                     post.put("likes", post.getLikes() - 1);
-                                    Toast.makeText(view.getContext(), "unliked", Toast.LENGTH_SHORT).show();
                                     post.saveInBackground(new SaveCallback() {
                                         @Override
                                         public void done(ParseException e) {
@@ -134,21 +133,20 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                                                 Log.i("LIKES", "Error unliking post!");
                                             }
                                             liked[0] = false;
-                                            tvLikes.setText(Integer.toString(post.getLikes()) + "likes");
+                                            tvLikes.setText(Integer.toString(post.getLikes()) + " likes");
                                         }
                                     });
                                 } else {
                                     ivLikes.setImageDrawable(view.getResources().getDrawable(R.drawable.ufi_heart_active));
                                     likers.add(ParseUser.getCurrentUser());
                                     post.put("likes", post.getLikes() + 1);
-                                    Toast.makeText(view.getContext(), "liked", Toast.LENGTH_SHORT).show();
                                     post.saveInBackground(new SaveCallback() {
                                         @Override
                                         public void done(ParseException e) {
                                             if (e != null) {
                                                 Log.i("LIKES", "Error liking post!");
                                             }
-                                            tvLikes.setText(Integer.toString(post.getLikes()) + "likes");
+                                            tvLikes.setText(Integer.toString(post.getLikes()) + " likes");
                                         }
                                     });
 
@@ -158,7 +156,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                     });
                 }//end onclick
             });
-            tvLikes.setText(Integer.toString(post.getLikes()) + "likes");
+            tvLikes.setText(Integer.toString(post.getLikes()) + " likes");
             tvLikes.setVisibility(View.VISIBLE);
         }
 
