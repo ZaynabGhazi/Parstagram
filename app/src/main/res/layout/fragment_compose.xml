@@ -24,6 +24,15 @@
         android:backgroundTint="@color/colorAccent"
         android:textColor="@android:color/white"
         android:text="Take Picture" />
+    <Button
+        android:id="@+id/btnSelectGallery"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/roboto"
+        android:backgroundTint="@color/colorAccent"
+        android:textColor="@android:color/white"
+        android:text="Select Picture from Gallery" />
+
 
     <ImageView
         android:id="@+id/ivPostImage"
