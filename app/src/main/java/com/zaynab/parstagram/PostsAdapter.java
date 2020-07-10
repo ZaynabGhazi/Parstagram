@@ -4,11 +4,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Movie;
 import android.os.Bundle;
+import android.provider.ContactsContract;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,12 +19,20 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.parse.FindCallback;
+import com.parse.Parse;
+import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseQuery;
+import com.parse.ParseRelation;
+import com.parse.ParseUser;
+import com.parse.SaveCallback;
 import com.zaynab.parstagram.fragments.GridProfileFragment;
 import com.zaynab.parstagram.fragments.PostDetailsFragment;
 
 import org.w3c.dom.Text;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> {
@@ -50,6 +61,8 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         private ImageView ivPhoto;
         private TextView tvTimestamp;
         private ImageView ivProfile;
+        private ImageView ivLikes;
+        private TextView tvLikes;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -58,10 +71,12 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             ivPhoto = itemView.findViewById(R.id.ivPost);
             tvTimestamp = itemView.findViewById(R.id.tvTimestamp);
             ivProfile = itemView.findViewById(R.id.ivProfile);
+            ivLikes = itemView.findViewById(R.id.ivLike);
+            tvLikes = itemView.findViewById(R.id.tvLikes);
             itemView.setOnClickListener(this);
         }
 
-        public void bind(Post post) {
+        public void bind(final Post post) {
             tvUsername.setText(post.getUser().getUsername());
             tvDesc.setText(post.getDescription());
             tvTimestamp.setText(TimeFormatter.getTimeDifference(post.getCreatedAt().toString()) + " ago");
@@ -86,8 +101,65 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                     launchGridProfile(view);
                 }
             });
+            final boolean[] liked = {false};
+            //implement a like-system
+            ivLikes.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(final View view) {
+                    //check if user already liked
+                    //should be optimized
+                    final ParseRelation<ParseUser> likers = post.getRelation("likers");
+                    final ParseQuery<ParseUser> usrLikers = likers.getQuery();
+                    usrLikers.findInBackground(new FindCallback<ParseUser>() {
+                        @Override
+                        public void done(List<ParseUser> objects, ParseException e) {
+                            if (e == null) {
+                                Log.i("USERS:", "Looking for current user");
+                                for (int i = 0; i < objects.size(); i++) {
+                                    Log.i("USERS:", objects.get(i).getUsername());
+                                    if (objects.get(i).getObjectId().equals(ParseUser.getCurrentUser().getObjectId())) {
+                                        liked[0] = true;
+                                        break;
+                                    }
+                                }//end loop
+                                if (liked[0]) {
+                                    ivLikes.setImageDrawable(view.getResources().getDrawable(R.drawable.ufi_heart));
+                                    likers.remove(ParseUser.getCurrentUser());
+                                    post.put("likes", post.getLikes() - 1);
+                                    Toast.makeText(view.getContext(), "unliked", Toast.LENGTH_SHORT).show();
+                                    post.saveInBackground(new SaveCallback() {
+                                        @Override
+                                        public void done(ParseException e) {
+                                            if (e != null) {
+                                                Log.i("LIKES", "Error unliking post!");
+                                            }
+                                            liked[0] = false;
+                                            tvLikes.setText(Integer.toString(post.getLikes()) + "likes");
+                                        }
+                                    });
+                                } else {
+                                    ivLikes.setImageDrawable(view.getResources().getDrawable(R.drawable.ufi_heart_active));
+                                    likers.add(ParseUser.getCurrentUser());
+                                    post.put("likes", post.getLikes() + 1);
+                                    Toast.makeText(view.getContext(), "liked", Toast.LENGTH_SHORT).show();
+                                    post.saveInBackground(new SaveCallback() {
+                                        @Override
+                                        public void done(ParseException e) {
+                                            if (e != null) {
+                                                Log.i("LIKES", "Error liking post!");
+                                            }
+                                            tvLikes.setText(Integer.toString(post.getLikes()) + "likes");
+                                        }
+                                    });
 
-
+                                }
+                            }//end works
+                        }//end done
+                    });
+                }//end onclick
+            });
+            tvLikes.setText(Integer.toString(post.getLikes()) + "likes");
+            tvLikes.setVisibility(View.VISIBLE);
         }
 
         public void launchGridProfile(View view) {

@@ -27,6 +27,8 @@ public class Post extends ParseObject implements Serializable {
         return getParseUser(KEY_USER);
     }
 
+    public int getLikes(){return getInt("likes");}
+
     public void setDescription(String description) {
         put(KEY_DESCRIPTION, description);
     }
