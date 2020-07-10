@@ -80,14 +80,15 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             tvUsername.setText(post.getUser().getUsername());
             tvDesc.setText(post.getDescription());
             tvTimestamp.setText(TimeFormatter.getTimeDifference(post.getCreatedAt().toString()) + " ago");
-            //correct heart:
-            if (post.liked_by_cusr) {
+
+            //correct heart icon:
+            if (post.likedByCurrentUser) {
                 Glide.with(context).load(R.drawable.ufi_heart_active).into(ivLikes);
             }
             else   Glide.with(context).load(R.drawable.ufi_heart).into(ivLikes);
+
             ParseFile image = post.getImage();
             if (image != null) Glide.with(context).load(image.getUrl()).into(ivPhoto);
-            // Glide.with(context).load(post.getUser().get("Photo")).placeholder(R.drawable.profile_placeholder).apply(RequestOptions.circleCropTransform()).into(ivProfile);
             Glide.with(context).load(R.drawable.profile_placeholder).apply(RequestOptions.circleCropTransform()).into(ivProfile);
             if (post.getUser().get("Photo") != null)
                 Glide.with(context).load(post.getUser().getParseFile("Photo").getUrl()).placeholder(R.drawable.profile_placeholder).apply(RequestOptions.circleCropTransform()).into(ivProfile);
@@ -99,6 +100,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                     launchGridProfile(view);
                 }
             });
+
             ivProfile.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -106,6 +108,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                     launchGridProfile(view);
                 }
             });
+
             final boolean[] liked = {false};
             //implement a like-system
             ivLikes.setOnClickListener(new View.OnClickListener() {
@@ -128,35 +131,9 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                                     }
                                 }//end loop
                                 if (liked[0]) {
-                                    ivLikes.setImageDrawable(view.getResources().getDrawable(R.drawable.ufi_heart));
-                                    likers.remove(ParseUser.getCurrentUser());
-                                    post.put("likes", post.getLikes() - 1);
-                                    post.liked_by_cusr = false;
-                                    post.saveInBackground(new SaveCallback() {
-                                        @Override
-                                        public void done(ParseException e) {
-                                            if (e != null) {
-                                                Log.i("LIKES", "Error unliking post!");
-                                            }
-                                            liked[0] = false;
-                                            tvLikes.setText(Integer.toString(post.getLikes()) + " likes");
-                                        }
-                                    });
+                                        unlikePost(view,post,likers,liked);
                                 } else {
-                                    ivLikes.setImageDrawable(view.getResources().getDrawable(R.drawable.ufi_heart_active));
-                                    likers.add(ParseUser.getCurrentUser());
-                                    post.put("likes", post.getLikes() + 1);
-                                    post.liked_by_cusr = true;
-                                    post.saveInBackground(new SaveCallback() {
-                                        @Override
-                                        public void done(ParseException e) {
-                                            if (e != null) {
-                                                Log.i("LIKES", "Error liking post!");
-                                            }
-                                            tvLikes.setText(Integer.toString(post.getLikes()) + " likes");
-                                        }
-                                    });
-
+                                        likePost(view,post,likers);
                                 }
                             }//end works
                         }//end done
@@ -179,7 +156,39 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         public void onClick(View view) {
             clickListener.OnItemClicked(getAdapterPosition());
         }
-    }
+        public void likePost(View view, final Post post, ParseRelation<ParseUser> likers){
+            ivLikes.setImageDrawable(view.getResources().getDrawable(R.drawable.ufi_heart_active));
+            likers.add(ParseUser.getCurrentUser());
+            post.put("likes", post.getLikes() + 1);
+            post.likedByCurrentUser = true;
+            post.saveInBackground(new SaveCallback() {
+                @Override
+                public void done(ParseException e) {
+                    if (e != null) {
+                        Log.i("LIKES", "Error liking post!");
+                    }
+                    tvLikes.setText(Integer.toString(post.getLikes()) + " likes");
+                }
+            });
+        }
+
+        public void unlikePost(View view, final Post post, ParseRelation<ParseUser> likers, final boolean[] liked){
+            ivLikes.setImageDrawable(view.getResources().getDrawable(R.drawable.ufi_heart));
+            likers.remove(ParseUser.getCurrentUser());
+            post.put("likes", post.getLikes() - 1);
+            post.likedByCurrentUser = false;
+            post.saveInBackground(new SaveCallback() {
+                @Override
+                public void done(ParseException e) {
+                    if (e != null) {
+                        Log.i("LIKES", "Error unliking post!");
+                    }
+                    liked[0] = false;
+                    tvLikes.setText(Integer.toString(post.getLikes()) + " likes");
+                }
+            });
+        }
+    }//end VH_CLASS
 
     @NonNull
     @Override
@@ -209,4 +218,5 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         posts.addAll(list);
         notifyDataSetChanged();
     }
+
 }
