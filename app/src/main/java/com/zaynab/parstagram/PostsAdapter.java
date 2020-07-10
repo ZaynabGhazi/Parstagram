@@ -80,6 +80,11 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             tvUsername.setText(post.getUser().getUsername());
             tvDesc.setText(post.getDescription());
             tvTimestamp.setText(TimeFormatter.getTimeDifference(post.getCreatedAt().toString()) + " ago");
+            //correct heart:
+            if (post.liked_by_cusr) {
+                Glide.with(context).load(R.drawable.ufi_heart_active).into(ivLikes);
+            }
+            else   Glide.with(context).load(R.drawable.ufi_heart).into(ivLikes);
             ParseFile image = post.getImage();
             if (image != null) Glide.with(context).load(image.getUrl()).into(ivPhoto);
             // Glide.with(context).load(post.getUser().get("Photo")).placeholder(R.drawable.profile_placeholder).apply(RequestOptions.circleCropTransform()).into(ivProfile);
@@ -126,6 +131,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                                     ivLikes.setImageDrawable(view.getResources().getDrawable(R.drawable.ufi_heart));
                                     likers.remove(ParseUser.getCurrentUser());
                                     post.put("likes", post.getLikes() - 1);
+                                    post.liked_by_cusr = false;
                                     post.saveInBackground(new SaveCallback() {
                                         @Override
                                         public void done(ParseException e) {
@@ -140,6 +146,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                                     ivLikes.setImageDrawable(view.getResources().getDrawable(R.drawable.ufi_heart_active));
                                     likers.add(ParseUser.getCurrentUser());
                                     post.put("likes", post.getLikes() + 1);
+                                    post.liked_by_cusr = true;
                                     post.saveInBackground(new SaveCallback() {
                                         @Override
                                         public void done(ParseException e) {
