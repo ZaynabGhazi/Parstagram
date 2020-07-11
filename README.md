@@ -44,12 +44,13 @@ Please list two areas of the assignment you'd like to **discuss further with you
 
 ## Video Walkthrough
 
-Here's a walkthrough of implemented user stories:
+Here's a walkthrough of implemented user stories
 
-<img src='demo11' title='Video Walkthrough1' width='' alt='Video Walkthrough' />
-<img src='demo22' title='Video Walkthrough2' width='' alt='Video Walkthrough' />
+<img src='demo11-min.gif' title='Video Walkthrough1' width='' alt='Video Walkthrough' />
+<img src='demo22-min.gif' title='Video Walkthrough2' width='' alt='Video Walkthrough' />
 <img src='scrolling.gif' title='Video Walkthrough3' width='' alt='Video Walkthrough' />
 <img src='refresh.gif' title='Video Walkthrough4' width='' alt='Video Walkthrough' />
+<img src='user-persistence.gif' title='Video Walkthrough5' width='' alt='Video Walkthrough' />
 
 
 GIF created with [Kap](https://getkap.co).
