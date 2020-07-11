@@ -46,9 +46,13 @@ Please list two areas of the assignment you'd like to **discuss further with you
 
 Here's a walkthrough of implemented user stories:
 
-<img src='http://i.imgur.com/link/to/your/gif/file.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+<img src='demo11' title='Video Walkthrough1' width='' alt='Video Walkthrough' />
+<img src='demo22' title='Video Walkthrough2' width='' alt='Video Walkthrough' />
+<img src='scrolling' title='Video Walkthrough3' width='' alt='Video Walkthrough' />
+<img src='refresh' title='Video Walkthrough4' width='' alt='Video Walkthrough' />
 
-GIF created with [LiceCap](http://www.cockos.com/licecap/).
+
+GIF created with [Kap](https://getkap.co).
 
 ## Credits
 
@@ -59,7 +63,8 @@ List an 3rd party libraries, icons, graphics, or other assets you used in your a
 
 ## Notes
 
-Describe any challenges encountered while building the app.
+- I implemented liking both in details and timeline.
+- I have a linear profile if accessed through bottom navigation and grid-view profile if accessed through username/profile picture.
 
 ## License
 
