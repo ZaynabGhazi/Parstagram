@@ -50,7 +50,7 @@ Here's a walkthrough of implemented user stories
 <img src='demo22-min.gif' title='Video Walkthrough2' width='' alt='Video Walkthrough' />
 <img src='scrolling.gif' title='Video Walkthrough3' width='' alt='Video Walkthrough' />
 <img src='refresh.gif' title='Video Walkthrough4' width='' alt='Video Walkthrough' />
-<img src='user-persistence.gif' title='Video Walkthrough5' width='' alt='Video Walkthrough' />
+<img src='user_persistence.gif' title='Video Walkthrough5' width='' alt='Video Walkthrough' />
 
 
 GIF created with [Kap](https://getkap.co).
