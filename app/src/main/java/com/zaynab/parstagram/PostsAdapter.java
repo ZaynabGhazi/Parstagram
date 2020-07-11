@@ -161,6 +161,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             likers.add(ParseUser.getCurrentUser());
             post.put("likes", post.getLikes() + 1);
             post.likedByCurrentUser = true;
+            PostsAdapter.this.notifyItemChanged(getAdapterPosition());
             post.saveInBackground(new SaveCallback() {
                 @Override
                 public void done(ParseException e) {
@@ -177,6 +178,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             likers.remove(ParseUser.getCurrentUser());
             post.put("likes", post.getLikes() - 1);
             post.likedByCurrentUser = false;
+            PostsAdapter.this.notifyItemChanged(getAdapterPosition());
             post.saveInBackground(new SaveCallback() {
                 @Override
                 public void done(ParseException e) {
@@ -219,4 +221,14 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         notifyDataSetChanged();
     }
 
+    //quick fix to recycled icons
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
 }
